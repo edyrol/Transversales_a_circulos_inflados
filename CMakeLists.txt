@@ -43,9 +43,12 @@ endif()
 
 include_directories( ${PROJECT_SOURCE_DIR}/include )
 
-add_executable( main  main.cpp )
+add_executable( mismoradio  mismoradio.cpp )
+add_executable( main main.cpp )
 
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS mismoradio )
 add_to_cached_list( CGAL_EXECUTABLE_TARGETS main )
 
 # Link the executable to CGAL and third-party libraries
+target_link_libraries(mismoradio   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
 target_link_libraries(main   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
