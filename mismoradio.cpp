@@ -3,39 +3,30 @@
 #include "transversal.hpp"
 #include <iostream>
 
-using Fam_Circles = std::vector<Circle>;
 int pop_size = 50;
 int family_size = 7;
-int k = 5;
+int k = 3;
 int num_epochs = 900000;
 Random R;
 
-Fam_Circles random_family()
-{
+//Crea familia aleatoria
+Fam_Circles random_family() {
     Fam_Circles F(family_size);
     std::generate(F.begin(), F.end(), []() {
-        return Circle{{R.random_real(-10, 10), R.random_real(-10, 10)},
-                      1}; // Mismo radio
+        return Circle{{R.random_real(-10, 10), R.random_real(-10, 10)}, 1}; // Mismo radio
     });
     rescale_TK(F, k); // Mismo radio
     return F;
 }
 
-Point_2 operator+(const Point_2& A, const Point_2& B)
-{
-    return Point_2(A.x() + B.x(), A.y() + B.y());
+Circle operator+(const Circle& A, const Circle& B)
+{ 
+    return {A.c + B.c, 1.0}; 
 }
-
-Point_2 operator*(double a, const Point_2& P)
-{
-    return Point_2(a*P.x(), a*P.y());
-}
-
-Circle operator+(const Circle& A, const Circle& B) { return {A.c + B.c, 1.0}; }
 
 Circle operator-(const Circle& A, const Circle& B)
 {
-    return {Origin + (A.c - B.c), 1.0};
+    return {Point(0,0) + (A.c - B.c), 1.0};
 }
 
 Circle operator*(double a, const Circle& C) { return {a*C.c, 1.0}; }
@@ -95,7 +86,7 @@ int main()
         std::sqrt(-D.best_cost) << '\n'; std::cout << D.best << "\n\n";
         }*/
     }
-    std::cout << std::setprecision(10);
+    std::cout << std::setprecision(15);
     std::cout << "Cost: " << std::sqrt(-D.best_cost) << '\n';
     std::cout << D.best << "\n";
     std::cout << "Total time taken: " << C.Peek() << "s\n";
