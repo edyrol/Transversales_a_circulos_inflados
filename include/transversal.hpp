@@ -15,6 +15,8 @@ struct Circle {
     Point c;
     double r;
 };
+
+//Familia de círculos
 using Fam_Circles = std::vector<Circle>;
 
 //Operaciones con puntos
@@ -64,7 +66,7 @@ double min_inflate_sq(const Fam_Circles& F, Line L) {
     {
         auto d2 = squared_distance(circle.c, L);
         auto ratio = d2/(circle.r*circle.r);
-        if (ratio > worst)
+        if (worst < ratio)
             worst = ratio;
     }
     return worst;
@@ -93,7 +95,7 @@ double min_inflate_TK_sq(const Fam_Circles& F, int k) {
     {
         Fam_Circles T(kada.begin(), kada.end());
         double lll = min_inflate_sq(T);
-        if (lll > worst)
+        if (worst < lll)
             worst = lll;
     }
     return worst;
@@ -129,4 +131,10 @@ void greedy_rescale_TK(Fam_Circles& F, int k)
     {
         F[i].r *= sqrt(worst[i]);
     }
+}
+
+void replace_by_bigger(double& a, double b)
+{
+    if (a < b)
+        a = b;
 }

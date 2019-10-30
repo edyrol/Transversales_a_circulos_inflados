@@ -8,15 +8,15 @@
 
 // This class MINIMIZES! Remember that!
 
-template <class Vector, class Cost>
+template <class Vector, class Cost, class Projector=Identity<Vector>()>
 class DifferentialEvolver
 {
 public:
     using Population = std::vector<Vector>;
     using idx = std::ptrdiff_t;
 
-    DifferentialEvolver(Population InitialPopulation, Cost f)
-        : f(f), X(InitialPopulation)
+    DifferentialEvolver(Population InitialPopulation, Cost f, Projector P = Identity<Vector>())
+        : f(f), X(InitialPopulation), project_to_manifold(P)
     {
         if (population_size() < 4)
         {
@@ -39,10 +39,8 @@ public:
         best_cost = costs[best_idx];
     };
 
-    template <class Projector = Identity<Vector>>
     void step(double change_prob = 0.5,
-              double force = 0.1,
-              Projector project_to_manifold = Identity<Vector>())
+              double force = 0.1)
     {
         for (auto i : indices(X))
         {
@@ -113,6 +111,7 @@ private:
 
 private:
     Cost f;
+    Projector project_to_manifold;
     std::vector<Vector> X;
     std::vector<double> costs;
 

@@ -43,12 +43,21 @@ endif()
 
 include_directories( ${PROJECT_SOURCE_DIR}/include )
 
-add_executable( mismoradio  mismoradio.cpp )
-add_executable( main main.cpp )
+add_executable( mismoradio_de  mismoradio_de.cpp )
+add_executable( distintoradio_de distintoradio_de.cpp )
+add_executable( mismoradio_gd  mismoradio_gd.cpp )
+add_executable( distintoradio_gd distintoradio_gd.cpp )
+add_executable( playground playground.cpp )
 
-add_to_cached_list( CGAL_EXECUTABLE_TARGETS mismoradio )
-add_to_cached_list( CGAL_EXECUTABLE_TARGETS main )
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS mismoradio_de )
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS distintoradio_de )
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS mismoradio_de )
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS distintoradio_de )
+add_to_cached_list( CGAL_EXECUTABLE_TARGETS playground )
 
 # Link the executable to CGAL and third-party libraries
-target_link_libraries(mismoradio   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
-target_link_libraries(main   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
+target_link_libraries(mismoradio_de   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
+target_link_libraries(distintoradio_de   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
+target_link_libraries(mismoradio_gd   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
+target_link_libraries(distintoradio_gd   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
+target_link_libraries(playground   ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
