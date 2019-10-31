@@ -133,6 +133,7 @@ void greedy_rescale_TK(Fam_Circles& F, int k)
     }
 }
 
+//Una función tonta para ahorrar espacio después
 void replace_by_bigger(double& a, double b)
 {
     if (a < b)

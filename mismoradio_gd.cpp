@@ -39,6 +39,8 @@ int main()
     double best_cost = 0.0;
     Fam_Circles best;
     int tries = 0;
+    int tries_until_best=0;
+    double time_until_best=0.0;
     Chronometer miniC;
     while(C.Peek() < timeout)
     {
@@ -64,6 +66,7 @@ int main()
             }
         );
         
+        
         double best_local = GD.cost;
         while(true) {
             GD.step(0.2, 0.01);
@@ -74,6 +77,8 @@ int main()
         }
         ++tries;
         if(GD.cost < best_cost){
+            tries_until_best = tries;
+            time_until_best = C.Peek();
             best_cost = GD.cost;
             best = GD.F;
         }
@@ -83,6 +88,8 @@ int main()
         }
     }
     std::cout << std::setprecision(15);
-    std::cout << "\nCost: " << std::sqrt(-best_cost) << '\n';
+    std::cout << "\nTries until best was found: " << tries_until_best << '\n';
+    std::cout << "Time until best was found: " << time_until_best << "s\n";
+    std::cout << "Cost: " << std::sqrt(-best_cost) << '\n';
     std::cout << best;
 }

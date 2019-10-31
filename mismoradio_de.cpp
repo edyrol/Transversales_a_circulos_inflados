@@ -64,18 +64,28 @@ int main()
     );
 
     int steps = 0;
+    int steps_until_best=0;
+    double time_until_best=0.0;
+    double best_cost=0.0;
     Chronometer miniC;
     while(C.Peek() < timeout)
     {
         D.step(0.5, 0.5);
         ++steps;
+        if(D.best_cost < best_cost){
+            best_cost = D.best_cost;
+            steps_until_best = steps;
+            time_until_best = C.Peek();
+        }
         if(miniC.Peek() > print_timeout){
             std::cout <<"Steps: "<< steps << '\n' << "Cost:  " << std::sqrt(-D.best_cost) << "\n";
             miniC.Reset();
         }
     }
     std::cout << std::setprecision(15);
-    std::cout << "\nCost: " << std::sqrt(-D.best_cost) << '\n';
+    std::cout << "\nSteps until best was found: " << steps_until_best << '\n';
+    std::cout << "Time until best was found: " << time_until_best << "s\n";
+    std::cout << "Cost: " << std::sqrt(-D.best_cost) << '\n';
     std::cout << D.best;
     return 0;
 }
