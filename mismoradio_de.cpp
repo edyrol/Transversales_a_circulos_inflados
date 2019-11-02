@@ -8,9 +8,11 @@ int family_size = 5;
 int k = 3;
 double timeout = 600;
 double print_timeout = 10;
+
 Random R;
 
-Fam_Circles random_family() {
+Fam_Circles random_family()
+{
     Fam_Circles F(family_size);
     std::generate(F.begin(), F.end(), []() {
         return Circle{{R.random_real(-10, 10), R.random_real(-10, 10)}, 1}; // Mismo radio
@@ -19,17 +21,17 @@ Fam_Circles random_family() {
     return F;
 }
 
-Circle operator+(const Circle& A, const Circle& B)
-{ 
-    return {A.c + B.c, 1.0}; 
-}
-
-Circle operator-(const Circle& A, const Circle& B)
+Circle operator+(const Circle &A, const Circle &B)
 {
-    return {Point(0,0) + (A.c - B.c), 1.0};
+    return {A.c + B.c, 1.0};
 }
 
-Circle operator*(double a, const Circle& C) { return {a*C.c, 1.0}; }
+Circle operator-(const Circle &A, const Circle &B)
+{
+    return {Point(0, 0) + (A.c - B.c), 1.0};
+}
+
+Circle operator*(double a, const Circle &C) { return {a * C.c, 1.0}; }
 
 int main()
 {
@@ -44,41 +46,49 @@ int main()
 
     DifferentialEvolver D(
         Population,
-        [](const Fam_Circles& F) {
+        [](const Fam_Circles &F) {
             return -min_inflate_sq(F);
         },
-        [](Fam_Circles& F) {
+        [](Fam_Circles &F) {
             double max_number = 0;
-            for (auto& f : F)
+            for (auto &f : F)
             {
                 replace_by_bigger(max_number, std::abs(f.c.x()));
                 replace_by_bigger(max_number, std::abs(f.c.y()));
             }
-            for (auto& f : F)
+            for (auto &f : F)
             {
-                f = (10.0/max_number)*f;
+                f = (10.0 / max_number) * f;
                 f.r = 1.0; // Mismo radio
             }
             rescale_TK(F, k); // Mismo radio
-        }
-    );
+        });
 
     int steps = 0;
-    int steps_until_best=0;
-    double time_until_best=0.0;
-    double best_cost=0.0;
+    int steps_until_best = 0;
+    double time_until_best = 0.0;
+    double best_cost = 0.0;
+    bool improved = false;
     Chronometer miniC;
-    while(C.Peek() < timeout)
+    while (C.Peek() < timeout)
     {
         D.step(0.5, 0.5);
         ++steps;
-        if(D.best_cost < best_cost){
+        if (D.best_cost < best_cost)
+        {
             best_cost = D.best_cost;
+            improved = true;
             steps_until_best = steps;
             time_until_best = C.Peek();
         }
-        if(miniC.Peek() > print_timeout){
-            std::cout <<"Steps: "<< steps << '\n' << "Cost:  " << std::sqrt(-D.best_cost) << "\n";
+        if (miniC.Peek() > print_timeout)
+        {
+            if (improved)
+            {
+                std::cout << "Time:  " << C.Peek() << '\n'
+                          << "Steps: " << steps << '\n'
+                          << "Cost:  " << std::sqrt(-D.best_cost) << "\n";
+            }
             miniC.Reset();
         }
     }
