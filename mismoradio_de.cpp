@@ -88,6 +88,7 @@ int main()
                 std::cout << "Time:  " << C.Peek() << '\n'
                           << "Steps: " << steps << '\n'
                           << "Cost:  " << std::sqrt(-D.best_cost) << "\n";
+                improved = false;
             }
             miniC.Reset();
         }
