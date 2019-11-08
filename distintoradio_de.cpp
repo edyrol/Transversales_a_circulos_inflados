@@ -7,7 +7,7 @@ int pop_size = 60;   // Population size
 int family_size = 5; // Size of the family of circles
 int k = 3;           // The number k in Tk
 double timeout = 600;
-double print_timeout = 10;
+double print_timeout = 2;
 
 Random R;
 
@@ -35,9 +35,9 @@ Circle operator*(double a, const Circle &C) { return {a * C.c, a * C.r}; }
 
 int main()
 {
-    std::cout << "Distinto radio\nk, num_circles, timeout\n";
+    std::cout << "Distinto radio\nDifferential Evolution\nk\tnum_circles\ttimeout\n";
     std::cin >> k >> family_size >> timeout;
-
+    std::cout << k << '\t' <<  family_size << '\t' << timeout << '\n';
     Chronometer C;
     std::vector<Fam_Circles> Population(pop_size);
     std::generate(Population.begin(), Population.end(), []() {
@@ -70,6 +70,7 @@ int main()
     double best_cost = 0.0;
     bool improved = false;
     Chronometer miniC;
+    std::cout << "Time\tSteps\tCost\n";
     while (C.Peek() < timeout)
     {
         D.step(0.5, 0.5);
@@ -85,9 +86,7 @@ int main()
         {
             if (improved)
             {
-                std::cout << "Time:  " << C.Peek() << '\n'
-                          << "Steps: " << steps << '\n'
-                          << "Cost:  " << std::sqrt(-D.best_cost) << "\n";
+                std::cout << C.Peek() << '\t' << steps << '\t' << std::sqrt(-D.best_cost) << "\n";
                 improved = false;
             }
             miniC.Reset();

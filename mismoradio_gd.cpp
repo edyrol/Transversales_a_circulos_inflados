@@ -6,7 +6,7 @@
 int family_size = 5; // Size of the family of circles
 int k = 3;           // The number k in Tk
 double timeout = 600;
-double print_timeout = 10;
+double print_timeout = 2;
 
 Random R;
 
@@ -34,8 +34,9 @@ Circle operator*(double a, const Circle &C) { return {a * C.c, a * C.r}; }
 
 int main()
 {
-    std::cout << "Mismo radio\nk, num_circles, timeout\n";
+    std::cout << "Mismo radio\nGradient Descent\nk\tnum_circles\ttimeout\n";
     std::cin >> k >> family_size >> timeout;
+    std::cout << k << '\t' <<  family_size << '\t' << timeout << '\n';
 
     Chronometer C;
     double best_cost = 0.0;
@@ -45,6 +46,7 @@ int main()
     double time_until_best = 0.0;
     bool improved = false;
     Chronometer miniC;
+    std::cout << "Time\tTries\tCost\n";
     while (C.Peek() < timeout)
     {
         Fam_Circles F = random_family();
@@ -69,13 +71,16 @@ int main()
             });
 
         double best_local = GD.cost;
+        double force = 0.2;
         while (true)
         {
-            GD.step(0.2, 0.01);
-            if (GD.cost >= best_local)
-                break;
-            else
+            GD.step(force, 0.01);
+            if(GD.cost < best_local)
                 best_local = GD.cost;
+            else if (force > 0.0001)
+                force *=0.1;
+            else
+                break;
         }
         ++tries;
         if (GD.cost < best_cost)
@@ -90,9 +95,7 @@ int main()
         {
             if (improved)
             {
-                std::cout << "Time:  " << C.Peek() << '\n'
-                          << "Tries: " << tries << '\n'
-                          << "Cost:  " << std::sqrt(-best_cost) << "\n";
+                std::cout << C.Peek() << '\t' << tries << '\t' << std::sqrt(-best_cost) << '\n';
                 improved = false;
             }
             miniC.Reset();
